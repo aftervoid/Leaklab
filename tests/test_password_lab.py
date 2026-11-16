@@ -1,5 +1,7 @@
 from leaklab.password_lab import (
-    assess_password_shape, export_password_samples, generate_password_samples,
+    assess_password_shape,
+    export_password_samples,
+    generate_password_samples,
     summarize_synthetic_samples,
 )
 
