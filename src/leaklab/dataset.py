@@ -1,10 +1,9 @@
 """Deterministic synthetic record generation and hybrid export."""
 
 import csv
-import json
 import random
 from pathlib import Path
-from typing import Iterable, Iterator
+from collections.abc import Iterable, Iterator
 
 from leaklab.models import SyntheticRecord
 
