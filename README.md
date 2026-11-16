@@ -1,53 +1,38 @@
 # LeakLab
 
-LeakLab is a privacy-preserving lab for exploring **synthetic** exposure-style datasets. The initial scaffold targets one million generated records and provides both a command-line interface and a local web interface.
+LeakLab is a local, privacy-preserving password research lab. It combines **fictional password samples** with documented, public aggregate research to study password construction patterns. It supports reproducible datasets, transparent shape heuristics, and both CLI and web/API interfaces.
 
-> **Safety boundary:** this project is designed for synthetic test data only. It does not collect, import, search, validate, or distribute real leaked personal information, passwords, tokens, or other credentials. Generated identities use reserved example domains and are not real people.
+> **Data boundary:** LeakLab does not ingest breach dumps, check passwords against leaked lists, test logins, or collect real account credentials. Generated password strings are fictional test fixtures. Never enter a password used for a real account.
 
-## Project goals
+## Features
 
-- Generate a reproducible dataset of 1,000,000 synthetic records on demand.
-- Support a hybrid storage/export format: JSON Lines (`.jsonl`) and CSV.
-- Offer both CLI and HTTP/web interfaces.
-- Keep generated data local and avoid external data sources.
+- Deterministic generation of synthetic password samples.
+- Hybrid JSONL + CSV export, including one-million-sample runs.
+- Aggregate analysis of length, character-class diversity, and synthetic construction patterns.
+- Local web dashboard and API preview that returns aggregate statistics only.
+- GitHub Actions tests on pushes, pull requests, and manual runs.
 
-## Quick start
+The shape score is an educational heuristic, not a security guarantee, breach lookup, or crack-time estimate. Public research should be added only as aggregate statistics with source attribution and compatible terms; do not import raw credential datasets.
 
-Requires Python 3.11 or newer.
+## Quick start (Windows PowerShell)
 
-```bash
+Requires Python 3.11+.
+
+```powershell
 python -m venv .venv
-# Windows PowerShell:
 .venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
-
 python -m pip install -e ".[dev]"
-python -m leaklab.cli generate --count 1000000 --format both --output data/generated
+python -m leaklab.cli passwords --count 1000000 --format both --output data/passwords
 uvicorn leaklab.api:app --reload
 ```
 
-Open http://127.0.0.1:8000 for the API and http://127.0.0.1:8000/docs for the development API docs. The frontend scaffold is in `frontend/`; it can be served by any static file server and will connect to the local API.
+Open http://127.0.0.1:8000 and http://127.0.0.1:8000/docs.
 
-## Configuration
+## Tests
 
-Defaults are intentionally conservative. See `.env.example`. The generator accepts a seed so test runs can be reproduced.
-
-## Repository layout
-
-- `src/leaklab/`: generator, data model, CLI, and API.
-- `frontend/`: lightweight browser dashboard.
-- `tests/`: automated tests.
-- `docs/`: architecture and development notes.
-
-## Current status
-
-This commit establishes the initial project structure. Dataset generation, API routes, and the browser dashboard are intentionally small starting points and will be expanded in later steps.
-
-## Development
-
-```bash
-pytest
+```powershell
+python -m pytest -q
+python -m ruff check src tests
 ```
 
-See [SECURITY.md](SECURITY.md) for the project's data-handling boundary.
+GitHub Actions runs the same checks automatically. See [SECURITY.md](SECURITY.md) and [docs/password-research.md](docs/password-research.md) for the data policy and research scope.
