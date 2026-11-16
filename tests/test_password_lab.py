@@ -48,7 +48,6 @@ def test_hibp_rejects_non_synthetic_records():
 
 def test_hibp_k_anonymity_lookup_uses_only_hash_prefix(monkeypatch):
     import hashlib
-    from io import BytesIO
     from leaklab.hibp import check_synthetic_sample
 
     sample = next(generate_password_samples(1, seed=42))
