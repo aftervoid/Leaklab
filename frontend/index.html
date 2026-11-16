@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Local dashboard for synthetic LeakLab datasets">
-  <title>LeakLab · Synthetic Data Lab</title>
+  <title>LeakLab · Password Research Lab</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -15,8 +15,8 @@
     </header>
     <section class="hero">
       <p class="eyebrow">PRIVACY-PRESERVING DATA WORKBENCH</p>
-      <h1>Explore the shape of data.<br><span>Not real people.</span></h1>
-      <p class="intro">A local lab for reproducible, fictional exposure-style datasets.</p>
+      <h1>Study password patterns.<br><span>Never real credentials.</span></h1>
+      <p class="intro">A local lab for studying password patterns with fictional samples and aggregate research.</p>
     </section>
     <section class="status-card" aria-labelledby="status-title">
       <div>
@@ -26,12 +26,19 @@
       </div>
       <span id="status-indicator" class="indicator" aria-hidden="true"></span>
     </section>
+    <section class="status-card" aria-labelledby="research-title">
+      <div>
+        <p class="eyebrow">SYNTHETIC PASSWORD RESEARCH</p>
+        <h2 id="research-title">Loading sample analysis…</h2>
+        <p id="research-detail">Aggregate-only analysis of generated fixtures.</p>
+      </div>
+    </section>
     <section class="stats">
-      <article><p class="eyebrow">TARGET DATASET</p><strong>1,000,000</strong><span>synthetic records</span></article>
+      <article><p class="eyebrow">TARGET DATASET</p><strong>1,000,000</strong><span>synthetic password samples</span></article>
       <article><p class="eyebrow">EXPORT FORMATS</p><strong>JSONL + CSV</strong><span>hybrid output</span></article>
       <article><p class="eyebrow">INTERFACES</p><strong>CLI + Web</strong><span>both available</span></article>
     </section>
-    <footer>LeakLab is synthetic-only. Never load real leaked personal data or credentials.</footer>
+    <footer>Synthetic samples only. Never enter passwords used for real accounts.</footer>
   </main>
   <script src="/static/app.js" defer></script>
 </body>
