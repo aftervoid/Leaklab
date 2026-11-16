@@ -11,7 +11,7 @@ import random
 import string
 from collections import Counter
 from pathlib import Path
-from typing import Iterator
+from collections.abc import Iterator
 
 WORDS = ("cobalt", "maple", "orbit", "velvet", "harbor", "comet", "willow", "pixel",
          "canyon", "ember", "lunar", "meadow", "quartz", "ripple", "thunder", "spruce")
