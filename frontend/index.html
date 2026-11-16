@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local dashboard for synthetic LeakLab datasets">
+  <title>LeakLab · Synthetic Data Lab</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="LeakLab home"><span class="brand-mark">LL</span> LeakLab</a>
+      <span class="environment">LOCAL · SYNTHETIC DATA</span>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">PRIVACY-PRESERVING DATA WORKBENCH</p>
+      <h1>Explore the shape of data.<br><span>Not real people.</span></h1>
+      <p class="intro">A local lab for reproducible, fictional exposure-style datasets.</p>
+    </section>
+    <section class="status-card" aria-labelledby="status-title">
+      <div>
+        <p class="eyebrow">SYSTEM STATUS</p>
+        <h2 id="status-title">Connecting to local API…</h2>
+        <p id="status-detail">Checking the development server.</p>
+      </div>
+      <span id="status-indicator" class="indicator" aria-hidden="true"></span>
+    </section>
+    <section class="stats">
+      <article><p class="eyebrow">TARGET DATASET</p><strong>1,000,000</strong><span>synthetic records</span></article>
+      <article><p class="eyebrow">EXPORT FORMATS</p><strong>JSONL + CSV</strong><span>hybrid output</span></article>
+      <article><p class="eyebrow">INTERFACES</p><strong>CLI + Web</strong><span>both available</span></article>
+    </section>
+    <footer>LeakLab is synthetic-only. Never load real leaked personal data or credentials.</footer>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
