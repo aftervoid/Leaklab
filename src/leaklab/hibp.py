@@ -4,6 +4,7 @@ Only the first five characters of a locally computed SHA-1 digest are sent
 to Have I Been Pwned. This module accepts generator records, not raw input.
 No password, full digest, or API response corpus is persisted.
 """
+# ruff: noqa: I001
 from __future__ import annotations
 
 import hashlib
