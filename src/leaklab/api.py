@@ -8,8 +8,8 @@ from fastapi.staticfiles import StaticFiles
 
 from leaklab import __version__
 from leaklab.config import settings
-from leaklab.password_lab import generate_password_samples, summarize_synthetic_samples
 from leaklab.hibp import summarize_hibp_synthetic_samples
+from leaklab.password_lab import generate_password_samples, summarize_synthetic_samples
 
 app = FastAPI(
     title="LeakLab",
