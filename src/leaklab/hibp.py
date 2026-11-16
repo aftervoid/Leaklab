@@ -6,8 +6,8 @@ No password, full digest, or API response corpus is persisted.
 """
 from __future__ import annotations
 
-from collections.abc import Iterable
 import hashlib
+from collections.abc import Iterable
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
