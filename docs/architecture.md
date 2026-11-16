@@ -1,28 +1,28 @@
 # Architecture
 
-## Initial shape
+## Application layers
 
-LeakLab starts as a small Python application with two user-facing interfaces:
+- `src/leaklab/password_lab.py`: deterministic synthetic password fixture generation,
+  streaming JSONL/CSV export, and transparent shape heuristics.
+- `src/leaklab/cli.py`: CLI commands for synthetic profile fixtures, password samples,
+  and aggregate analysis.
+- `src/leaklab/api.py`: local FastAPI health/config endpoints and aggregate-only
+  password research summary.
+- `frontend/`: browser dashboard that reads local API status and aggregate summaries.
+- `tests/`: unit tests for reproducibility, synthetic labeling, export formats,
+  and analysis summaries.
 
-1. **CLI** for reproducible generation and export jobs.
-2. **Web UI + HTTP API** for local status and future dataset summaries.
+## Data flow
 
-The data layer yields records lazily so a one-million-row run does not need to keep the entire dataset in memory.
+The generator yields one fictional sample at a time. Exporters stream records to disk
+rather than retaining the full dataset in memory. The summary analyzer counts pattern
+categories and ratings, returning aggregate values without returning sample strings.
 
-## Hybrid dataset
+## Research and privacy boundary
 
-The same deterministic generator can export to:
-- JSON Lines (`records.jsonl`), one JSON object per line.
-- CSV (`records.csv`), with a header row.
+The current analyzer measures length and character-class diversity. It does not estimate
+cracking time, compare against breached-password corpora, or establish that a password
+is safe. Public research can be represented as cited aggregate statistics; raw credential
+lists and real account passwords are out of scope.
 
-Both formats are generated independently from the same seed and record ordering.
-
-## Privacy boundary
-
-All records are fictional. Email addresses use `example.invalid`, usernames are generated labels, and no password or token fields exist. The application is not an ingestion pipeline for real breach material.
-
-## Planned increments
-
-- Add streaming progress reporting for large exports.
-- Add summary endpoints and visualizations over generated local fixtures.
-- Add integration tests for the HTTP API.
+See [password-research.md](password-research.md) and [SECURITY.md](../SECURITY.md).
