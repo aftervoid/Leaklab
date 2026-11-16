@@ -10,8 +10,8 @@ import json
 import random
 import string
 from collections import Counter
-from pathlib import Path
 from collections.abc import Iterator
+from pathlib import Path
 
 WORDS = ("cobalt", "maple", "orbit", "velvet", "harbor", "comet", "willow", "pixel",
          "canyon", "ember", "lunar", "meadow", "quartz", "ripple", "thunder", "spruce")
