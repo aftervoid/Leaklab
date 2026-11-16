@@ -1,3 +1,6 @@
+import hashlib
+
+from leaklab.hibp import check_synthetic_sample, summarize_hibp_synthetic_samples
 from leaklab.password_lab import (
     assess_password_shape,
     export_password_samples,
@@ -36,8 +39,6 @@ def test_hybrid_password_export(tmp_path):
 
 
 def test_hibp_rejects_non_synthetic_records():
-    from leaklab.hibp import check_synthetic_sample
-
     try:
         check_synthetic_sample({"sample_id": "user-1", "password_sample": "not-for-use", "synthetic": "false"})
     except ValueError as exc:
@@ -47,9 +48,6 @@ def test_hibp_rejects_non_synthetic_records():
 
 
 def test_hibp_k_anonymity_lookup_uses_only_hash_prefix(monkeypatch):
-    import hashlib
-    from leaklab.hibp import check_synthetic_sample
-
     sample = next(generate_password_samples(1, seed=42))
     digest = hashlib.sha1(sample["password_sample"].encode("utf-8")).hexdigest().upper()
     seen = {}
@@ -78,8 +76,6 @@ def test_hibp_k_anonymity_lookup_uses_only_hash_prefix(monkeypatch):
 
 
 def test_hibp_summary_returns_aggregates_only(monkeypatch):
-    from leaklab.hibp import summarize_hibp_synthetic_samples
-
     monkeypatch.setattr("leaklab.hibp.check_synthetic_sample", lambda sample: 0)
     result = summarize_hibp_synthetic_samples(generate_password_samples(3))
     assert result["samples_checked"] == 3
