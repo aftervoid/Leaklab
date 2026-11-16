@@ -62,7 +62,7 @@ def test_hibp_k_anonymity_lookup_uses_only_hash_prefix(monkeypatch):
             return None
 
         def read(self):
-            return f"{digest[5:]}:17\\r\\n".encode("ascii")
+            return f"{digest[5:]}:17\r\n".encode("ascii")
 
     def fake_urlopen(request, timeout):
         seen["url"] = request.full_url
