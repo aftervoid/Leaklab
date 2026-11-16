@@ -2,8 +2,8 @@
 
 import csv
 import random
-from pathlib import Path
 from collections.abc import Iterable, Iterator
+from pathlib import Path
 
 from leaklab.models import SyntheticRecord
 
