@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from leaklab.dataset import generate_dataset
@@ -29,7 +29,7 @@ def build_daily_bundle(
     )
     manifest: dict[str, object] = {
         "dataset_date": run_date.isoformat(),
-        "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "generated_at_utc": datetime.now(UTC).replace(microsecond=0).isoformat(),
         "seed": seed,
         "records_per_format": records,
         "password_samples_per_format": passwords,
