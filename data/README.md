@@ -1,9 +1,11 @@
 # Daily generated datasets
 
-The daily dataset pipeline uses two independent GitHub Actions workflows.
+The daily dataset pipeline uses two independent GitHub Actions workflows. Both run entirely on GitHub; no external scheduler or GitHub Actions Artifacts are required.
 
-1. **Generator** creates the full synthetic exports and commits them directly to the repository.
-2. **Splitter** starts only after the generator workflow completes successfully, waits **11 minutes**, then creates numbered 500-row copies. It never deletes or modifies the original large exports.
+1. **Generator** runs daily at **00:17 UTC**, creates the full synthetic exports, and commits them directly to the repository.
+2. **Splitter** runs daily at **00:29 UTC** (about 12 minutes after the generator's scheduled start). It creates numbered 500-row copies and never deletes or modifies the original large exports.
+
+The splitter also supports manual runs from the Actions tab. It checks the latest manifest first and exits without changes if that dataset has already been split. Since the two workflows use fixed UTC schedules, the second workflow is not guaranteed to start exactly 11 minutes after the generator finishes. GitHub may also delay scheduled workflow starts during periods of high load.
 
 Each UTC date gets its own folder:
 
