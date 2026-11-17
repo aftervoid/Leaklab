@@ -2,8 +2,8 @@
 
 **Date:** 2026-11-17  
 **Seed:** 20261117  
-**Profile records:** 10000 per format  
-**Synthetic password samples:** 5000 per format  
+**Profile records:** 100000 per format  
+**Synthetic password samples:** 50000 per format  
 **Chunk size:** 500 rows per file
 
 > Large exports are split into numbered chunks so each file stays manageable in GitHub.
@@ -21,14 +21,14 @@
 
 ## Password-sample aggregate
 
-- Samples analyzed: **5000**
-- Average length: **15.54** characters
+- Samples analyzed: **50000**
+- Average length: **15.55** characters
 
 | Pattern | Count |
 |---|---:|
-| lowercase_digits | 1667 |
-| three_word_phrase | 1667 |
-| mixed_random | 1666 |
+| lowercase_digits | 16667 |
+| three_word_phrase | 16667 |
+| mixed_random | 16666 |
 
 ## Profile records
 
