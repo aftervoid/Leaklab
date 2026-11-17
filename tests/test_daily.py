@@ -18,3 +18,9 @@ def test_daily_bundle_contains_only_expected_synthetic_exports(tmp_path):
 
     saved_manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     assert saved_manifest["data_policy"].startswith("Synthetic fixtures only")
+
+    preview = (tmp_path / "README.md").read_text(encoding="utf-8")
+    assert "first 5 profile records" in preview
+    assert "user00000001@example.invalid" in preview
+    assert "Password samples (JSONL)" in preview
+    assert "password_sample" not in preview
