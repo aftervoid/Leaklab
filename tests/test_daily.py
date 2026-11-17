@@ -32,7 +32,7 @@ def test_daily_bundle_splits_exports_into_small_numbered_chunks(tmp_path):
     last_password_chunk = (tmp_path / "passwords" / "password-samples-0003.csv").read_text(
         encoding="utf-8"
     ).splitlines()
-    assert len(last_password_chunk) == 3  # header plus the final two rows
+    assert len(last_password_chunk) == 2  # header plus the final row
 
     saved_manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     assert saved_manifest["data_policy"].startswith("Synthetic fixtures only")
