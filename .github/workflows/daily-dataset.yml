@@ -69,7 +69,7 @@ jobs:
           )
           print(json.dumps(manifest, ensure_ascii=False, indent=2))
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output_file:
-              output_file.write(f"preview_path={output / 'README.md'}\\n")
+              output_file.write(f"preview_path={output / 'README.md'}\n")
           PY
 
       - name: Show compact preview in the Actions run
