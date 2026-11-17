@@ -42,7 +42,7 @@ def split_daily_bundle(output_dir: Path) -> dict[str, Any]:
     manifest["records_files"] = record_files
     manifest["password_sample_files"] = password_files
     manifest_path.write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n",
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     _write_preview(output_dir, manifest)
