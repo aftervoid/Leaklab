@@ -1,6 +1,10 @@
 name: daily-synthetic-dataset
 
 on:
+  # Updating this workflow starts one run so the new preview is generated immediately.
+  push:
+    paths:
+      - ".github/workflows/daily-dataset.yml"
   schedule:
     - cron: "17 0 * * *"
   workflow_dispatch:
@@ -43,11 +47,13 @@ jobs:
         run: python -m pip install .
 
       - name: Generate daily synthetic datasets
+        id: generate
         env:
           RECORD_COUNT: ${{ inputs.record_count || '10000' }}
           PASSWORD_COUNT: ${{ inputs.password_count || '5000' }}
         run: |
           python - <<'PY'
+          import json
           import os
           from datetime import datetime, timezone
           from pathlib import Path
@@ -61,8 +67,18 @@ jobs:
               record_count=int(os.environ["RECORD_COUNT"]),
               password_count=int(os.environ["PASSWORD_COUNT"]),
           )
-          print(manifest)
+          print(json.dumps(manifest, ensure_ascii=False, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output_file:
+              output_file.write(f"preview_path={output / 'README.md'}\\n")
           PY
+
+      - name: Show compact preview in the Actions run
+        run: |
+          {
+            echo "## Daily dataset preview"
+            echo
+            cat "${{ steps.generate.outputs.preview_path }}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit generated datasets to the repository
         run: |
