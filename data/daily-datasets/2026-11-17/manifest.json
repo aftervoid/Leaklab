@@ -2,27 +2,27 @@
   "dataset_date": "2026-11-17",
   "seed": 20261117,
   "records_per_format": {
-    "jsonl": 100000,
-    "csv": 100000
+    "jsonl": 10000,
+    "csv": 10000
   },
   "password_samples_per_format": {
-    "jsonl": 50000,
-    "csv": 50000
+    "jsonl": 5000,
+    "csv": 5000
   },
   "password_sample_summary": {
-    "samples_analyzed": 50000,
-    "average_length": 15.55,
+    "samples_analyzed": 5000,
+    "average_length": 15.54,
     "patterns": {
-      "lowercase_digits": 16667,
-      "three_word_phrase": 16667,
-      "mixed_random": 16666
+      "lowercase_digits": 1667,
+      "three_word_phrase": 1667,
+      "mixed_random": 1666
     },
     "ratings": {
-      "very_short": 16667,
-      "good": 12523,
-      "strong": 5587,
-      "moderate": 15167,
-      "limited": 56
+      "very_short": 1667,
+      "good": 1201,
+      "strong": 563,
+      "moderate": 1560,
+      "limited": 9
     },
     "notice": "Synthetic fixtures only; heuristic shape analysis, not breach checking."
   },
