@@ -1,0 +1,77 @@
+name: daily-synthetic-dataset-splitter
+
+on:
+  workflow_run:
+    workflows:
+      - daily-synthetic-dataset-generator
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-synthetic-dataset-splitter
+  cancel-in-progress: false
+
+jobs:
+  split:
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait 11 minutes after generator completion
+        run: sleep 660
+
+      - name: Check out generated dataset
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install LeakLab
+        run: python -m pip install .
+
+      - name: Split the latest daily dataset and preserve originals
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from leaklab.split_daily import split_daily_bundle
+
+          root = Path("data/daily-datasets")
+          candidates = sorted(
+              path for path in root.iterdir()
+              if path.is_dir() and (path / "manifest.json").is_file()
+          )
+          if not candidates:
+              raise SystemExit("No generated daily dataset was found.")
+          target = candidates[-1]
+          manifest = split_daily_bundle(target)
+          print(json.dumps({
+              "dataset": str(target),
+              "split_complete": manifest["split_complete"],
+              "records_chunks": len(manifest["records_files"]["jsonl"]),
+              "password_chunks": len(manifest["password_sample_files"]["jsonl"]),
+          }, indent=2))
+          PY
+
+      - name: Commit split files without deleting original exports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/daily-datasets/
+          if git diff --cached --quiet; then
+            echo "No split dataset changes to commit."
+          else
+            git commit -m "chore(data): add delayed split exports for $(date -u +%F)"
+            git push
+          fi
