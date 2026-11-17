@@ -1,5 +1,5 @@
-from datetime import date
 import json
+from datetime import date
 
 from leaklab.daily import build_daily_bundle
 
