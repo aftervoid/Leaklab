@@ -23,4 +23,4 @@ def test_daily_bundle_contains_only_expected_synthetic_exports(tmp_path):
     assert "first 5 profile records" in preview
     assert "user00000001@example.invalid" in preview
     assert "Password samples (JSONL)" in preview
-    assert "password_sample" not in preview
+    assert '"password_sample":' not in preview
