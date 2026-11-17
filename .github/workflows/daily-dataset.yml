@@ -1,0 +1,71 @@
+name: daily-synthetic-dataset
+
+on:
+  schedule:
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+    inputs:
+      record_count:
+        description: "Number of synthetic profile records"
+        required: false
+        default: "10000"
+        type: string
+      password_count:
+        description: "Number of synthetic password samples"
+        required: false
+        default: "5000"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-synthetic-dataset
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install LeakLab
+        run: python -m pip install .
+
+      - name: Generate daily synthetic datasets
+        env:
+          RECORD_COUNT: ${{ inputs.record_count || '10000' }}
+          PASSWORD_COUNT: ${{ inputs.password_count || '5000' }}
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from leaklab.daily import build_daily_bundle
+
+          today = datetime.now(timezone.utc).date()
+          output = Path("build/daily-dataset") / today.isoformat()
+          manifest = build_daily_bundle(
+              today,
+              output,
+              record_count=int(os.environ["RECORD_COUNT"]),
+              password_count=int(os.environ["PASSWORD_COUNT"]),
+          )
+          print(manifest)
+          PY
+
+      - name: Upload daily dataset artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: leaklab-synthetic-dataset-${{ github.run_id }}
+          path: build/daily-dataset/
+          if-no-files-found: error
+          retention-days: 14
