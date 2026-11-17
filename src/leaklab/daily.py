@@ -52,7 +52,6 @@ def _split_export(source: Path, output_dir: Path, stem: str, suffix: str,
             if target is not None:
                 target.close()
 
-    source.unlink()
     return names
 
 
@@ -145,22 +144,19 @@ def build_daily_bundle(
     )
 
     record_files = {
-        "jsonl": _split_export(records_dir / "records.jsonl", records_dir, "records", ".jsonl"),
-        "csv": _split_export(records_dir / "records.csv", records_dir, "records", ".csv"),
+        "jsonl": ["records.jsonl"],
+        "csv": ["records.csv"],
     }
     password_files = {
-        "jsonl": _split_export(
-            passwords_dir / "password_samples.jsonl", passwords_dir, "password-samples", ".jsonl"
-        ),
-        "csv": _split_export(
-            passwords_dir / "password_samples.csv", passwords_dir, "password-samples", ".csv"
-        ),
+        "jsonl": ["password_samples.jsonl"],
+        "csv": ["password_samples.csv"],
     }
 
     manifest: dict[str, Any] = {
         "dataset_date": run_date.isoformat(),
         "seed": seed,
         "chunk_size": CHUNK_SIZE,
+        "split_complete": False,
         "records_per_format": records,
         "password_samples_per_format": passwords,
         "records_files": record_files,
