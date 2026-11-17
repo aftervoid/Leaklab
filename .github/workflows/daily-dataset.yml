@@ -1,4 +1,4 @@
-name: daily-synthetic-dataset
+name: daily-synthetic-dataset-generator
 
 on:
   # Changes to the generator or workflow start a fresh generation immediately.
