@@ -18,13 +18,15 @@ The shape score is an educational heuristic, not a security guarantee or crack-t
 
 ## Daily dataset generation
 
-The **Daily Synthetic Dataset** workflow runs once per day at 00:17 UTC and can also be started manually from the Actions tab. By default, each run generates:
+The **Daily Synthetic Dataset Generator** workflow runs once per day at **00:17 UTC** and can also be started manually from the Actions tab. By default, each run generates:
 
 - 10,000 fictional profile records (records.jsonl and records.csv).
 - 5,000 fictional password samples (password_samples.jsonl and password_samples.csv).
 - manifest.json with the UTC date, reproducible seed, record counts, and aggregate password-shape statistics.
 
-Generated files are committed directly to data/daily-datasets/YYYY-MM-DD/ on main. Rerunning the workflow on the same UTC date updates that date's directory; a new date creates a new directory. The seed is derived from the UTC date, so sample values are reproducible for that date. Because these files are committed, Git history and repository size grow over time. See [data/README.md](data/README.md).
+The independent **Daily Synthetic Dataset Splitter** workflow runs at **00:29 UTC**. It creates numbered 500-row copies while preserving the original large exports. It can also be started manually. Both workflows use GitHub Actions only: there is no external scheduler, no waiting step, and no GitHub Actions Artifacts. The fixed schedule means the splitter is not guaranteed to start exactly 11 minutes after the generator finishes; GitHub may delay scheduled workflow starts during high-load periods.
+
+Generated files are committed directly to data/daily-datasets/YYYY-MM-DD/ on main. Rerunning the generator on the same UTC date updates that date's original exports; a new date creates a new directory. The seed is derived from the UTC date, so sample values are reproducible for that date. Because these files are committed, Git history and repository size grow over time. See [data/README.md](data/README.md).
 
 ## Quick start (Windows PowerShell)
 
