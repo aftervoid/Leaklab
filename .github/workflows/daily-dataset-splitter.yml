@@ -1,11 +1,11 @@
 name: daily-synthetic-dataset-splitter
 
 on:
-  workflow_run:
-    workflows:
-      - daily-synthetic-dataset-generator
-    types:
-      - completed
+  # Run after the daily generator's 00:17 UTC schedule.
+  # The 00:29 UTC start leaves a buffer without occupying a runner while waiting.
+  schedule:
+    - cron: "29 0 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,14 +16,8 @@ concurrency:
 
 jobs:
   split:
-    if: >-
-      ${{ github.event.workflow_run.conclusion == 'success' &&
-          github.event.workflow_run.head_repository.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - name: Wait 11 minutes after generator completion
-        run: sleep 660
-
       - name: Check out generated dataset
         uses: actions/checkout@v4
         with:
@@ -54,7 +48,14 @@ jobs:
           )
           if not candidates:
               raise SystemExit("No generated daily dataset was found.")
+
           target = candidates[-1]
+          manifest_path = target / "manifest.json"
+          current_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          if current_manifest.get("split_complete"):
+              print(f"Latest dataset is already split: {target}")
+              raise SystemExit(0)
+
           manifest = split_daily_bundle(target)
           print(json.dumps({
               "dataset": str(target),
