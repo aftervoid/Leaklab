@@ -17,7 +17,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: daily-synthetic-dataset
@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -52,7 +54,7 @@ jobs:
           from leaklab.daily import build_daily_bundle
 
           today = datetime.now(timezone.utc).date()
-          output = Path("build/daily-dataset") / today.isoformat()
+          output = Path("data/daily-datasets") / today.isoformat()
           manifest = build_daily_bundle(
               today,
               output,
@@ -62,10 +64,14 @@ jobs:
           print(manifest)
           PY
 
-      - name: Upload daily dataset artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: leaklab-synthetic-dataset-${{ github.run_id }}
-          path: build/daily-dataset/
-          if-no-files-found: error
-          retention-days: 14
+      - name: Commit generated datasets to the repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/daily-datasets/
+          if git diff --cached --quiet; then
+            echo "No dataset changes to commit."
+          else
+            git commit -m "chore(data): add synthetic dataset for $(date -u +%F)"
+            git push
+          fi
