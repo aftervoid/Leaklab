@@ -1,10 +1,12 @@
 name: daily-synthetic-dataset
 
 on:
-  # Updating this workflow starts one run so the new preview is generated immediately.
+  # Changes to the generator or workflow start a fresh generation immediately.
   push:
     paths:
       - ".github/workflows/daily-dataset.yml"
+      - "src/leaklab/daily.py"
+      - "tests/test_daily.py"
   schedule:
     - cron: "17 0 * * *"
   workflow_dispatch:
@@ -88,6 +90,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dataset changes to commit."
           else
-            git commit -m "chore(data): add synthetic dataset for $(date -u +%F)"
+            git commit -m "chore(data): add chunked synthetic dataset for $(date -u +%F)"
             git push
           fi
