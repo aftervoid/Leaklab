@@ -2,7 +2,7 @@
   "dataset_date": "2026-11-19",
   "seed": 20261119,
   "chunk_size": 500,
-  "split_complete": false,
+  "split_complete": true,
   "records_per_format": {
     "jsonl": 10000,
     "csv": 10000
@@ -13,18 +13,74 @@
   },
   "records_files": {
     "jsonl": [
-      "records.jsonl"
+      "records-0001.jsonl",
+      "records-0002.jsonl",
+      "records-0003.jsonl",
+      "records-0004.jsonl",
+      "records-0005.jsonl",
+      "records-0006.jsonl",
+      "records-0007.jsonl",
+      "records-0008.jsonl",
+      "records-0009.jsonl",
+      "records-0010.jsonl",
+      "records-0011.jsonl",
+      "records-0012.jsonl",
+      "records-0013.jsonl",
+      "records-0014.jsonl",
+      "records-0015.jsonl",
+      "records-0016.jsonl",
+      "records-0017.jsonl",
+      "records-0018.jsonl",
+      "records-0019.jsonl",
+      "records-0020.jsonl"
     ],
     "csv": [
-      "records.csv"
+      "records-0001.csv",
+      "records-0002.csv",
+      "records-0003.csv",
+      "records-0004.csv",
+      "records-0005.csv",
+      "records-0006.csv",
+      "records-0007.csv",
+      "records-0008.csv",
+      "records-0009.csv",
+      "records-0010.csv",
+      "records-0011.csv",
+      "records-0012.csv",
+      "records-0013.csv",
+      "records-0014.csv",
+      "records-0015.csv",
+      "records-0016.csv",
+      "records-0017.csv",
+      "records-0018.csv",
+      "records-0019.csv",
+      "records-0020.csv"
     ]
   },
   "password_sample_files": {
     "jsonl": [
-      "password_samples.jsonl"
+      "password-samples-0001.jsonl",
+      "password-samples-0002.jsonl",
+      "password-samples-0003.jsonl",
+      "password-samples-0004.jsonl",
+      "password-samples-0005.jsonl",
+      "password-samples-0006.jsonl",
+      "password-samples-0007.jsonl",
+      "password-samples-0008.jsonl",
+      "password-samples-0009.jsonl",
+      "password-samples-0010.jsonl"
     ],
     "csv": [
-      "password_samples.csv"
+      "password-samples-0001.csv",
+      "password-samples-0002.csv",
+      "password-samples-0003.csv",
+      "password-samples-0004.csv",
+      "password-samples-0005.csv",
+      "password-samples-0006.csv",
+      "password-samples-0007.csv",
+      "password-samples-0008.csv",
+      "password-samples-0009.csv",
+      "password-samples-0010.csv"
     ]
   },
   "password_sample_summary": {
