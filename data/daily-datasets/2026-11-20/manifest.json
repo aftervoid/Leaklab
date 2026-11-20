@@ -1,0 +1,48 @@
+{
+  "dataset_date": "2026-11-20",
+  "seed": 20261120,
+  "chunk_size": 500,
+  "split_complete": false,
+  "records_per_format": {
+    "jsonl": 10000,
+    "csv": 10000
+  },
+  "password_samples_per_format": {
+    "jsonl": 5000,
+    "csv": 5000
+  },
+  "records_files": {
+    "jsonl": [
+      "records.jsonl"
+    ],
+    "csv": [
+      "records.csv"
+    ]
+  },
+  "password_sample_files": {
+    "jsonl": [
+      "password_samples.jsonl"
+    ],
+    "csv": [
+      "password_samples.csv"
+    ]
+  },
+  "password_sample_summary": {
+    "samples_analyzed": 5000,
+    "average_length": 15.55,
+    "patterns": {
+      "lowercase_digits": 1667,
+      "three_word_phrase": 1667,
+      "mixed_random": 1666
+    },
+    "ratings": {
+      "very_short": 1667,
+      "good": 1260,
+      "strong": 558,
+      "moderate": 1512,
+      "limited": 3
+    },
+    "notice": "Synthetic fixtures only; heuristic shape analysis, not breach checking."
+  },
+  "data_policy": "Synthetic fixtures only; no breach corpus or real account credentials."
+}
