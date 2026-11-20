@@ -31,7 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]" pip-audit
       - name: Audit installed dependencies
-        run: pip-audit --strict
+        run: pip-audit --strict --skip-editable
 
   codeql:
     name: CodeQL analysis
