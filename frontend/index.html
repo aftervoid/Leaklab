@@ -3,43 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Local dashboard for synthetic LeakLab datasets">
-  <title>LeakLab · Password Research Lab</title>
+  <meta name="description" content="Local, privacy-preserving synthetic password research workbench">
+  <meta name="theme-color" content="#090e1a">
+  <title>LeakLab — Research Workbench</title>
   <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar">
-      <a class="brand" href="/" aria-label="LeakLab home"><span class="brand-mark">LL</span> LeakLab</a>
-      <span class="environment">LOCAL · SYNTHETIC DATA</span>
-    </header>
-    <section class="hero">
-      <p class="eyebrow">PRIVACY-PRESERVING DATA WORKBENCH</p>
-      <h1>Study password patterns.<br><span>Never real credentials.</span></h1>
-      <p class="intro">A local lab for studying password patterns with fictional samples and aggregate research.</p>
-    </section>
-    <section class="status-card" aria-labelledby="status-title">
-      <div>
-        <p class="eyebrow">SYSTEM STATUS</p>
-        <h2 id="status-title">Connecting to local API…</h2>
-        <p id="status-detail">Checking the development server.</p>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="LeakLab home">
+        <span class="brand-mark">LL</span>
+        <span><strong>LeakLab</strong><small>RESEARCH WORKBENCH</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav-list">
+        <button class="nav-link active" data-view="overview"><span>◫</span> Overview</button>
+        <button class="nav-link" data-view="research"><span>⌁</span> Password research</button>
+        <button class="nav-link" data-view="datasets"><span>▤</span> Dataset center</button>
+        <button class="nav-link" data-view="system"><span>⌘</span> System status</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="privacy-note"><span class="privacy-dot"></span><div><strong>Local-first mode</strong><small>Synthetic data only</small></div></div>
+        <a class="sidebar-doc" href="https://github.com/aftervoid/Leaklab" target="_blank" rel="noreferrer">GitHub repository ↗</a>
       </div>
-      <span id="status-indicator" class="indicator" aria-hidden="true"></span>
-    </section>
-    <section class="status-card" aria-labelledby="research-title">
-      <div>
-        <p class="eyebrow">SYNTHETIC PASSWORD RESEARCH</p>
-        <h2 id="research-title">Loading sample analysis…</h2>
-        <p id="research-detail">Aggregate-only analysis of generated fixtures.</p>
-      </div>
-    </section>
-    <section class="stats">
-      <article><p class="eyebrow">TARGET DATASET</p><strong>1,000,000</strong><span>synthetic password samples</span></article>
-      <article><p class="eyebrow">EXPORT FORMATS</p><strong>JSONL + CSV</strong><span>hybrid output</span></article>
-      <article><p class="eyebrow">INTERFACES</p><strong>CLI + Web</strong><span>both available</span></article>
-    </section>
-    <footer>Synthetic samples only. Never enter passwords used for real accounts.</footer>
-  </main>
-  <script src="/static/app.js" defer></script>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow">SECURITY RESEARCH / LOCAL INSTANCE</p><h1 id="page-title">Overview</h1></div>
+        <div class="topbar-right"><span class="live-pill"><i></i> LOCAL ENVIRONMENT</span><button id="refresh-button" class="icon-button" type="button" aria-label="Refresh dashboard" title="Refresh">↻</button></div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="welcome-panel">
+          <div><p class="eyebrow mint">PRIVACY-PRESERVING RESEARCH</p><h2>Understand patterns.<br><span>Never handle real credentials.</span></h2><p>Explore reproducible synthetic datasets and transparent password-shape analysis in a local workspace.</p></div>
+          <div class="welcome-mark" aria-hidden="true"><span>LL</span><i></i><b></b></div>
+        </div>
+        <div class="section-heading"><div><p class="eyebrow">AT A GLANCE</p><h2>Workspace metrics</h2></div><span class="muted" id="last-updated">Waiting for API…</span></div>
+        <div class="metric-grid">
+          <article class="metric-card"><span class="metric-icon mint-bg">▤</span><p>Daily datasets</p><strong id="metric-datasets">—</strong><small id="metric-datasets-note">Indexed in this workspace</small></article>
+          <article class="metric-card"><span class="metric-icon blue-bg">⌁</span><p>Latest profile records</p><strong id="metric-records">—</strong><small>Fictional profile fixtures</small></article>
+          <article class="metric-card"><span class="metric-icon violet-bg">◈</span><p>Password samples</p><strong id="metric-passwords">—</strong><small>Generated research fixtures</small></article>
+          <article class="metric-card"><span class="metric-icon amber-bg">◷</span><p>Average sample length</p><strong id="metric-average">—</strong><small>Characters · latest dataset</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">LATEST GENERATION</p><h3>Dataset snapshot</h3></div><span id="dataset-state" class="state-pill">Checking</span></div><div id="latest-dataset" class="empty-state">Loading dataset metadata…</div><button class="text-button" data-go="datasets">Open dataset center →</button></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">DATA BOUNDARY</p><h3>Privacy by design</h3></div><span class="shield-icon">◇</span></div><ul class="check-list"><li>Fictional samples generated locally</li><li>Aggregate summaries returned by the API</li><li>No breach dumps or real credentials</li><li>No login testing or account access</li></ul><p class="panel-footnote">Never enter a password used for a real account.</p></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-research">
+        <div class="section-heading"><div><p class="eyebrow">SYNTHETIC PASSWORD RESEARCH</p><h2>Pattern analysis</h2><p class="section-description">Explore aggregate properties of reproducible fictional samples.</p></div></div>
+        <article class="panel research-controls"><div><label for="sample-count">Sample size</label><select id="sample-count"><option value="1000">1,000 samples</option><option value="5000">5,000 samples</option><option value="10000">10,000 samples</option><option value="25000">25,000 samples</option></select></div><button id="analyze-button" class="primary-button" type="button">Run analysis <span>↗</span></button></article>
+        <div class="metric-grid research-metrics"><article class="metric-card"><p>Samples analyzed</p><strong id="research-count">—</strong><small>Generated for this run</small></article><article class="metric-card"><p>Average length</p><strong id="research-average">—</strong><small>Characters</small></article><article class="metric-card"><p>Pattern families</p><strong id="research-pattern-count">—</strong><small>Distinct synthetic patterns</small></article></div>
+        <div class="content-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">DISTRIBUTION</p><h3>Construction patterns</h3></div></div><div id="pattern-chart" class="bar-chart"><p class="muted">Run an analysis to load chart data.</p></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">HEURISTIC OUTPUT</p><h3>Shape ratings</h3></div></div><div id="rating-chart" class="bar-chart"><p class="muted">Run an analysis to load chart data.</p></div><p class="panel-footnote">Shape ratings are educational heuristics, not crack-time estimates or security guarantees.</p></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-datasets">
+        <div class="section-heading"><div><p class="eyebrow">REPRODUCIBLE DATA</p><h2>Dataset center</h2><p class="section-description">Daily generation history and aggregate metadata committed to the repository.</p></div><span id="dataset-total" class="count-chip">— datasets</span></div>
+        <article class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">GENERATION HISTORY</p><h3>Available datasets</h3></div><button id="datasets-reload" class="secondary-button" type="button">Refresh list</button></div><div class="table-wrap"><table><thead><tr><th>UTC date</th><th>Profiles</th><th>Password samples</th><th>Split status</th><th>Seed</th></tr></thead><tbody id="dataset-table"><tr><td colspan="5" class="muted">Loading datasets…</td></tr></tbody></table></div><p class="panel-footnote">This view displays manifest metadata only. It does not load or expose sample contents.</p></article>
+      </section>
+
+      <section class="view" id="view-system">
+        <div class="section-heading"><div><p class="eyebrow">RUNTIME INFORMATION</p><h2>System status</h2><p class="section-description">Local API health and application configuration.</p></div></div>
+        <div class="content-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">CONNECTIVITY</p><h3>API health</h3></div><span id="api-state" class="state-pill">Checking</span></div><div class="system-row"><span>API endpoint</span><code>/api/health</code></div><div class="system-row"><span>Environment</span><strong id="system-environment">—</strong></div><div class="system-row"><span>Data policy</span><strong id="system-policy">—</strong></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">APPLICATION</p><h3>Build information</h3></div><span class="shield-icon">⌘</span></div><div class="system-row"><span>LeakLab version</span><strong id="system-version">—</strong></div><div class="system-row"><span>Default record target</span><strong id="system-default">—</strong></div><div class="system-row"><span>Dataset index</span><strong id="system-index">—</strong></div></article>
+        </div>
+        <article class="panel docs-panel"><p class="eyebrow">PROJECT DOCUMENTATION</p><h3>Explore the project</h3><div class="doc-links"><a href="https://github.com/aftervoid/Leaklab/blob/main/README.md" target="_blank" rel="noreferrer">README <span>↗</span></a><a href="https://github.com/aftervoid/Leaklab/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security policy <span>↗</span></a><a href="https://github.com/aftervoid/Leaklab/blob/main/docs/architecture.md" target="_blank" rel="noreferrer">Architecture <span>↗</span></a></div></article>
+      </section>
+
+      <footer class="app-footer"><span>LEAKLAB · LOCAL RESEARCH WORKBENCH</span><span>Fictional data only · Privacy first</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
