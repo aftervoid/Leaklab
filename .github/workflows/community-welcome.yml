@@ -1,0 +1,87 @@
+name: community-welcome
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+  discussion:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+  discussions: write
+
+jobs:
+  welcome:
+    name: Welcome new community members
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Post a friendly welcome
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sender = context.payload.sender;
+            if (!sender || sender.type === "Bot") {
+              core.info("Skipping bot-created content.");
+              return;
+            }
+
+            const kind = context.eventName;
+            const messages = {
+              issues: [
+                "👋 Thanks for opening this issue and helping improve LeakLab!",
+                "Before continuing, please take a moment to read the [README](https://github.com/aftervoid/Leaklab#readme) and our [Security & Data-Handling Policy](https://github.com/aftervoid/Leaklab/blob/main/SECURITY.md).",
+                "Please use fictional examples only. Do not post real passwords, credentials, tokens, personal information, or breach data.",
+                "We’ll review your report and get back to you as soon as we can. Thanks for your patience!"
+              ].join("\n\n"),
+              pull_request: [
+                "👋 Thanks for your contribution to LeakLab!",
+                "Please make sure you’ve reviewed the [README](https://github.com/aftervoid/Leaklab#readme) and our [Security & Data-Handling Policy](https://github.com/aftervoid/Leaklab/blob/main/SECURITY.md), especially the synthetic-only data boundary.",
+                "We’ll review your pull request and get back to you as soon as we can. Thanks for taking the time to contribute!"
+              ].join("\n\n"),
+              discussion: [
+                "👋 Welcome, and thanks for starting a discussion in the LeakLab community!",
+                "Please take a moment to read the [README](https://github.com/aftervoid/Leaklab#readme) and our [Security & Data-Handling Policy](https://github.com/aftervoid/Leaklab/blob/main/SECURITY.md) so everyone has the same project context.",
+                "Please keep examples fictional and avoid sharing real credentials, personal information, or breach data.",
+                "We’ll join the conversation and respond as soon as we can. Thanks for your patience!"
+              ].join("\n\n")
+            };
+
+            if (kind === "issues" || kind === "pull_request") {
+              const issue_number = kind === "issues"
+                ? context.payload.issue.number
+                : context.payload.pull_request.number;
+
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number,
+                body: messages[kind]
+              });
+              core.info(`Posted welcome comment on ${kind} #${issue_number}.`);
+              return;
+            }
+
+            if (kind === "discussion") {
+              const query = `
+                mutation($discussionId: ID!, $body: String!) {
+                  addDiscussionComment(input: {
+                    discussionId: $discussionId,
+                    body: $body
+                  }) {
+                    comment {
+                      url
+                    }
+                  }
+                }
+              `;
+
+              const result = await github.graphql(query, {
+                discussionId: context.payload.discussion.node_id,
+                body: messages.discussion
+              });
+
+              core.info(`Posted welcome comment: ${result.addDiscussionComment.comment.url}`);
+            }
