@@ -1,23 +1,24 @@
 name: daily-synthetic-dataset-generator
 
 on:
-  # Changes to the generator or workflow start a fresh generation immediately.
   push:
+    branches: [main]
     paths:
       - ".github/workflows/daily-dataset.yml"
       - "src/leaklab/daily.py"
+      - "src/leaklab/split_daily.py"
       - "tests/test_daily.py"
   schedule:
     - cron: "17 0 * * *"
   workflow_dispatch:
     inputs:
       record_count:
-        description: "Number of synthetic profile records"
+        description: "Number of synthetic profile records (0-100000)"
         required: false
         default: "10000"
         type: string
       password_count:
-        description: "Number of synthetic password samples"
+        description: "Number of synthetic password samples (0-100000)"
         required: false
         default: "5000"
         type: string
@@ -26,33 +27,64 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-synthetic-dataset
+  group: daily-dataset-writes
   cancel-in-progress: false
 
 jobs:
   generate:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: pyproject.toml
 
       - name: Install LeakLab
-        run: python -m pip install .
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
+
+      - name: Validate generation limits
+        id: limits
+        env:
+          RECORD_COUNT: \${{ inputs.record_count || '10000' }}
+          PASSWORD_COUNT: \${{ inputs.password_count || '5000' }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+
+          limits = {
+              "record_count": (os.environ["RECORD_COUNT"], 100_000),
+              "password_count": (os.environ["PASSWORD_COUNT"], 100_000),
+          }
+          output = []
+          for name, (raw, maximum) in limits.items():
+              try:
+                  value = int(raw)
+              except ValueError as exc:
+                  raise SystemExit(f"{name} must be an integer") from exc
+              if not 0 <= value <= maximum:
+                  raise SystemExit(f"{name} must be between 0 and {maximum}")
+              output.append(f"{name}={value}")
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as stream:
+              stream.write("\n".join(output) + "\n")
+          PY
 
       - name: Generate daily synthetic datasets
         id: generate
         env:
-          RECORD_COUNT: ${{ inputs.record_count || '10000' }}
-          PASSWORD_COUNT: ${{ inputs.password_count || '5000' }}
+          RECORD_COUNT: \${{ steps.limits.outputs.record_count }}
+          PASSWORD_COUNT: \${{ steps.limits.outputs.password_count }}
         run: |
           python - <<'PY'
           import json
@@ -79,7 +111,7 @@ jobs:
           {
             echo "## Daily dataset preview"
             echo
-            cat "${{ steps.generate.outputs.preview_path }}"
+            cat "\${{ steps.generate.outputs.preview_path }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit generated datasets to the repository
@@ -90,6 +122,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No dataset changes to commit."
           else
-            git commit -m "chore(data): add chunked synthetic dataset for $(date -u +%F)"
-            git push
+            git commit -m "chore(data): add synthetic dataset for $(date -u +%F)"
+            git push origin HEAD:main
           fi

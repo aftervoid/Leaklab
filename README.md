@@ -13,9 +13,15 @@ LeakLab is a local, privacy-preserving password research lab. It combines **fict
 - A responsive local research dashboard with overview, password analysis, dataset history, and system-status views.
 - Aggregate-only API endpoints for health, configuration, synthetic analysis, and daily dataset manifests.
 - Optional HIBP Pwned Passwords checks for generated fixtures using k-anonymity; only aggregate counts are returned.
-- GitHub Actions tests on pushes, pull requests, and manual runs.
+- GitHub Actions tests across supported Python versions, dependency auditing, and CodeQL static analysis.
 
 The shape score is an educational heuristic, not a security guarantee or crack-time estimate. LeakLab does not import RockYou or other raw credential lists. Its optional HIBP integration checks only generated synthetic fixtures: the first five characters of a locally computed SHA-1 hash are sent to HIBP, the full-hash comparison happens locally, and only aggregate counts are returned. See [Pwned Passwords API documentation](https://haveibeenpwned.com/api/v3#PwnedPasswords).
+
+## License
+
+The LeakLab source code and accompanying project documentation are released under the **MIT License**. See [LICENSE](LICENSE) for the complete terms.
+
+The MIT License does not automatically determine the terms for third-party research sources or separately supplied datasets. Check the relevant dataset manifest and source attribution before reusing those materials.
 
 ## Dashboard
 
@@ -82,4 +88,4 @@ python -m pytest -q
 python -m ruff check src tests
 ```
 
-GitHub Actions runs the same checks automatically. See [SECURITY.md](SECURITY.md) and [docs/password-research.md](docs/password-research.md) for the data policy and research scope.
+GitHub Actions runs the same checks automatically, tests Python 3.11–3.13, audits installed dependencies, and runs CodeQL analysis. Dependabot checks Python and GitHub Actions dependencies weekly. See [SECURITY.md](SECURITY.md) and [docs/password-research.md](docs/password-research.md) for the data policy and research scope.
