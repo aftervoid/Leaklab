@@ -56,8 +56,8 @@ jobs:
       - name: Validate generation limits
         id: limits
         env:
-          RECORD_COUNT: \${{ inputs.record_count || '10000' }}
-          PASSWORD_COUNT: \${{ inputs.password_count || '5000' }}
+          RECORD_COUNT: ${{ inputs.record_count || '10000' }}
+          PASSWORD_COUNT: ${{ inputs.password_count || '5000' }}
         run: |
           python - <<'PY'
           import os
@@ -83,8 +83,8 @@ jobs:
       - name: Generate daily synthetic datasets
         id: generate
         env:
-          RECORD_COUNT: \${{ steps.limits.outputs.record_count }}
-          PASSWORD_COUNT: \${{ steps.limits.outputs.password_count }}
+          RECORD_COUNT: ${{ steps.limits.outputs.record_count }}
+          PASSWORD_COUNT: ${{ steps.limits.outputs.password_count }}
         run: |
           python - <<'PY'
           import json
@@ -111,7 +111,7 @@ jobs:
           {
             echo "## Daily dataset preview"
             echo
-            cat "\${{ steps.generate.outputs.preview_path }}"
+            cat "${{ steps.generate.outputs.preview_path }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit generated datasets to the repository
